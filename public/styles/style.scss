@@ -1,0 +1,39 @@
+@import './components/index';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+body {
+	overflow-x: hidden;
+}
+
+@-moz-document url-prefix() {
+	html,
+	.list {
+		scrollbar-color: #1537df #ffffff;
+		scrollbar-width: thin;
+	}
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #1537df;
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+	background: rgb(31, 31, 39);
+	min-height: 100vh;
+	width: 100vw;
+	max-width: 100vw;
+}
