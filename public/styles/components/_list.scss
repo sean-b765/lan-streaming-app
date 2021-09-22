@@ -5,6 +5,9 @@
 	overflow: auto;
 	grid-auto-flow: row;
 
+	&__info {
+	}
+
 	&--media {
 	}
 
@@ -92,6 +95,10 @@
 					rgba(0, 0, 0, 1) 100%
 				);
 				transition: 0.5s all cubic-bezier(0.215, 0.61, 0.355, 1);
+
+				&__release-date {
+					margin-bottom: 10px;
+				}
 			}
 
 			.rating {

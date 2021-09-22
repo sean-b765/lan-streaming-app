@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
-import { IMedia } from '../../types/IMedia'
+import { IMedia } from '../../types/interfaces'
 import { disableScrolling, enableScrolling } from '../../util/scroll'
 import ViewMedia from '../ViewMedia'
 
@@ -9,7 +9,8 @@ const ModalMedia: React.FC<{
 	setMedia: Function
 	showing: boolean
 	setShowing: Function
-}> = ({ media, setMedia, showing, setShowing }) => {
+	infoElements?: ReactElement
+}> = ({ media, setMedia, showing, setShowing, infoElements: infoElements }) => {
 	useEffect(() => {
 		if (showing) disableScrolling()
 		else enableScrolling()
@@ -24,11 +25,13 @@ const ModalMedia: React.FC<{
 			<ViewMedia
 				headerChild={
 					<header>
-						{/* <section className="list__info">
-						</section> */}
+						<section className="list__info">{infoElements}</section>
 						<div className="navigation">
-							<button className="btn btn--back">
-								<BiArrowBack onClick={() => setShowing(false)} />
+							<button
+								className="btn btn--back"
+								onClick={() => setShowing(false)}
+							>
+								<BiArrowBack />
 							</button>
 						</div>
 					</header>

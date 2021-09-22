@@ -3,28 +3,35 @@
 	z-index: 999;
 	width: 100vw;
 	min-height: 100vh;
-	transform: scale(0);
-	background: rgba(24, 24, 37, 0.788);
-	transition: all 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 	max-height: 100vh;
+	top: 100vh;
+	opacity: 0;
+	background: rgb(26, 26, 36);
+	transition: all 0.8s cubic-bezier(1, -0.07, 0, 1.08);
 
 	&--active {
-		transform: scale(1);
+		top: 0;
+		opacity: 1;
+
+		.navigation {
+			position: fixed;
+		}
 	}
 
-	&--media {
-	}
-
-	.list {
-		max-height: 100vh;
-		> header {
-			.navigation {
-				position: fixed;
-				right: 0;
-				top: 0;
-				> .btn {
-					padding: 2rem 2rem 0.5rem 0.5rem;
-					font-size: 1.6rem;
+	&--media,
+	&--seasons {
+		.list {
+			max-height: 100vh;
+			> header {
+				position: relative;
+				.navigation {
+					position: absolute;
+					right: 0;
+					top: 0;
+					> .btn {
+						padding: 2rem 2rem 0.5rem 0.5rem;
+						font-size: 1.6rem;
+					}
 				}
 			}
 		}

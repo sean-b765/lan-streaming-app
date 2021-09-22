@@ -5,8 +5,15 @@
 	padding: 1rem;
 	font-size: 1.2rem;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	opacity: 0.9;
 	transition: all 0.35s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+	> * {
+		cursor: pointer;
+	}
 
 	&:hover {
 		opacity: 1;
