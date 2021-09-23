@@ -91,6 +91,27 @@
   background: rgba(0, 0, 0, 0.445);
 }
 
+.player__controls__main .vol-fs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.player__controls__main .vol-fs .btn {
+  font-size: 2rem;
+}
+
+.player__controls__main .vol-fs .player__controls__main__volume {
+  margin-right: 2rem;
+}
+
 .player__controls__main__seeker {
   position: relative;
   width: 100%;

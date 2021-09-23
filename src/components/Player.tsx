@@ -200,25 +200,39 @@ const Player: React.FC<{
 									}}
 								></div>
 							</div>
-							{!isMobile && (
-								<div className="player__controls__main__volume"></div>
-							)}
+							<div className="vol-fs">
+								{!isMobile && (
+									<div className="player__controls__main__volume">
+										<input
+											type="range"
+											name="volume"
+											id="volume"
+											min="0"
+											max="1"
+											step="0.01"
+											onChange={(e) => {
+												playerRef.current!.volume = parseFloat(e.target.value)
+											}}
+										/>
+									</div>
+								)}
 
-							{!isMobile && (
-								<button
-									className="player__controls__main__fullscreen btn"
-									onClick={() => {
-										if (isFullScreen) exitFullScreen()
-										else requestFullScreen()
-									}}
-								>
-									{isFullScreen ? (
-										<RiFullscreenExitLine />
-									) : (
-										<RiFullscreenLine />
-									)}
-								</button>
-							)}
+								{!isMobile && (
+									<button
+										className="player__controls__main__fullscreen btn"
+										onClick={() => {
+											if (isFullScreen) exitFullScreen()
+											else requestFullScreen()
+										}}
+									>
+										{isFullScreen ? (
+											<RiFullscreenExitLine />
+										) : (
+											<RiFullscreenLine />
+										)}
+									</button>
+								)}
+							</div>
 						</div>
 					</div>
 				)}

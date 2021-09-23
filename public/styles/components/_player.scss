@@ -72,6 +72,21 @@
 			align-items: center;
 			background: rgba(0, 0, 0, 0.445);
 
+			.vol-fs {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				margin-top: 1rem;
+
+				.btn {
+					font-size: 2rem;
+				}
+
+				.player__controls__main__volume {
+					margin-right: 2rem;
+				}
+			}
+
 			&__seeker {
 				position: relative;
 				width: 100%;
