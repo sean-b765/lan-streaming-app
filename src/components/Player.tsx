@@ -2,12 +2,20 @@ import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { IMedia } from '../types/interfaces'
 import { RiFullscreenExitLine, RiFullscreenLine } from 'react-icons/ri'
 import { disableScrolling, enableScrolling } from '../util/scroll'
-import { IoIosPause, IoIosPlay } from 'react-icons/io'
+import {
+	IoIosPause,
+	IoIosPlay,
+	IoMdVolumeHigh,
+	IoMdVolumeLow,
+	IoMdVolumeMute,
+	IoMdVolumeOff,
+} from 'react-icons/io'
 import { BiArrowBack } from 'react-icons/bi'
 import { AiOutlineClose } from 'react-icons/ai'
 import { isMobile } from 'react-device-detect'
 import { useIdleTimer } from 'react-idle-timer'
 import Loader from './Loader'
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants'
 
 const Player: React.FC<{
 	media: IMedia
@@ -22,6 +30,10 @@ const Player: React.FC<{
 	const [playing, setPlaying] = useState<boolean>(false)
 	const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
 	const [seeking, setSeeking] = useState(false)
+
+	const [duration, setDuration] = useState(0)
+	const [volume, setVolume] = useState(1)
+	const [lastVolumeBeforeMute, setLastVolumeBeforeMute] = useState(1)
 
 	const [progressPct, setProgressPct] = useState(0)
 	const [buffering, setBuffering] = useState(false)
@@ -48,6 +60,52 @@ const Player: React.FC<{
 	window.onmousemove = reset
 	window.onkeydown = reset
 
+	const allowedShortcutKeys = [
+		'ArrowLeft',
+		'ArrowRight',
+		'ArrowUp',
+		'ArrowDown',
+		'Space',
+		'KeyF',
+		'KeyM',
+	]
+
+	window.onkeyup = (e) => {
+		if (!allowedShortcutKeys.includes(e.code)) return
+
+		const time = duration * progressPct
+
+		e.preventDefault()
+		e.stopPropagation()
+
+		switch (e.code) {
+			case 'ArrowLeft':
+				seek(Math.max(time - 10, 0) / duration)
+				break
+			case 'ArrowRight':
+				seek(Math.min(time + 10, duration) / duration)
+				break
+			case 'ArrowDown':
+				handleSetVolume(volume - 0.1)
+				break
+			case 'ArrowUp':
+				handleSetVolume(volume + 0.1)
+				break
+			case 'Space':
+				if (isFullScreen || active) pausePlay()
+				break
+			case 'KeyF':
+				if (isFullScreen) exitFullScreen()
+				else requestFullScreen()
+				break
+			case 'KeyM':
+				mute()
+				break
+			default:
+				break
+		}
+	}
+
 	window.onmouseup = () => {
 		if (seeking) setSeeking(false)
 	}
@@ -61,6 +119,18 @@ const Player: React.FC<{
 	const formatMediaStream = () => {
 		if (!media._id) return
 		return `http://192.168.1.7:5000/files/stream/${media?._id}`
+	}
+
+	const formatTime = (value: number): string => {
+		let hours: any = Math.max(0, Math.floor(value / (60 * 60))).toFixed(0)
+		let mins: any = Math.max(0, Math.floor(value / 60)).toFixed(0)
+		let secs: any = Number(value % 60).toFixed(0)
+
+		hours = hours === 0 ? '0:' : `${hours}:`
+		mins = mins === 0 ? '00:' : mins > 9 ? `${mins}:` : `0${mins}:`
+		secs = secs === 0 ? '00' : secs > 9 ? `${secs}` : `0${secs}`
+
+		return `${hours}${mins}${secs}`
 	}
 
 	useEffect(() => {
@@ -109,12 +179,32 @@ const Player: React.FC<{
 			.catch(() => {})
 	}
 
-	const handleSeek = (percentage: number) => {
+	const seek = (percentage: number) => {
 		try {
-			const duration = playerRef.current?.duration || 0
-
-			playerRef.current?.fastSeek(percentage * duration)
+			playerRef.current!.currentTime = percentage * duration
 		} catch (err) {}
+	}
+
+	const handleSetVolume = (vol: number) => {
+		if (vol > 1) vol = 1
+		if (vol < 0) vol = 0
+
+		setVolume(vol)
+		setLastVolumeBeforeMute(vol)
+		playerRef.current!.volume = vol
+	}
+
+	const mute = () => {
+		console.log(volume)
+
+		if (volume === 0) {
+			playerRef.current!.volume = lastVolumeBeforeMute || 0.5
+			setVolume(lastVolumeBeforeMute || 0.5)
+		} else {
+			setLastVolumeBeforeMute(volume)
+			playerRef.current!.volume = 0
+			setVolume(0)
+		}
 	}
 
 	return media?._id ? (
@@ -135,7 +225,7 @@ const Player: React.FC<{
 					autoPlay
 					onPlay={() => setPlaying(true)}
 					onPause={() => setPlaying(false)}
-					onVolumeChange={() => {}}
+					onVolumeChange={() => setVolume(playerRef.current!.volume)}
 					onWaiting={() => {
 						setBuffering(true)
 					}}
@@ -147,7 +237,7 @@ const Player: React.FC<{
 							setProgressPct(currentTime / duration)
 						} catch (err) {}
 					}}
-					onLoadedMetadata={() => {}}
+					onLoadedMetadata={() => setDuration(playerRef.current!.duration || 0)}
 					onPointerDown={() => {
 						if (playerRef.current?.paused) playerRef.current?.play()
 						else playerRef.current?.pause()
@@ -170,39 +260,55 @@ const Player: React.FC<{
 
 						{/* Seek, volume, fullscreen, etc */}
 						<div className="player__controls__main">
-							<div
-								className="player__controls__main__seeker"
-								onClick={(e) => {
-									const target = e.target as HTMLElement
-									const { left, width } = target.getBoundingClientRect()
-									const x = e.clientX - left
-
-									const percentage = x / width
-
-									handleSeek(percentage)
-								}}
-								onMouseDown={() => setSeeking(true)}
-								onMouseUp={() => setSeeking(false)}
-								onMouseMove={() => {
-									console.log(seeking)
-								}}
-								ref={seekerRef}
-							>
-								<div className="seek" style={{ width: '100%' }}></div>
+							<div className="seek-ts">
+								<div className="player__controls__main__timestamp">
+									<span className="currentTime">
+										{formatTime(progressPct * duration)}
+									</span>
+									/<span className="duration">{formatTime(duration)}</span>
+								</div>
 								<div
-									className="progress"
-									style={{ width: `${Math.min(progressPct * 100, 100)}%` }}
-								></div>
-								<div
-									className="scrubber"
-									style={{
-										left: `${Math.min(progressPct * 100, 100)}%`,
+									className="player__controls__main__seeker"
+									onClick={(e) => {
+										const target = e.target as HTMLElement
+										const { left, width } = target.getBoundingClientRect()
+										const x = e.clientX - left
+
+										const percentage = x / width
+
+										seek(percentage)
 									}}
-								></div>
+									onMouseDown={() => setSeeking(true)}
+									onMouseUp={() => setSeeking(false)}
+									onMouseMove={() => {
+										console.log(seeking)
+									}}
+									ref={seekerRef}
+								>
+									<div className="seek" style={{ width: '100%' }}></div>
+									<div
+										className="progress"
+										style={{ width: `${Math.min(progressPct * 100, 100)}%` }}
+									></div>
+									<div
+										className="scrubber"
+										style={{
+											left: `${Math.min(progressPct * 100, 100)}%`,
+										}}
+									></div>
+								</div>
 							</div>
 							<div className="vol-fs">
 								{!isMobile && (
 									<div className="player__controls__main__volume">
+										<button
+											className="player__controls__main__volume__indicator btn"
+											onClick={mute}
+										>
+											{volume > 0.5 && <IoMdVolumeHigh />}
+											{volume > 0 && volume <= 0.5 && <IoMdVolumeLow />}
+											{volume === 0 && <IoMdVolumeOff />}
+										</button>
 										<input
 											type="range"
 											name="volume"
@@ -210,8 +316,10 @@ const Player: React.FC<{
 											min="0"
 											max="1"
 											step="0.01"
+											value={volume}
 											onChange={(e) => {
 												playerRef.current!.volume = parseFloat(e.target.value)
+												setVolume(parseFloat(e.target.value))
 											}}
 										/>
 									</div>

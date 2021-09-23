@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Loader = () => {
 	return (
 		<div className="loader">
@@ -10,7 +8,7 @@ const Loader = () => {
 				xmlns="http://www.w3.org/2000/svg"
 				stroke="#d3d3d3"
 			>
-				<g fill-rule="evenodd" stroke-width="2" fill="none">
+				<g fillRule="evenodd" strokeWidth="2" fill="none">
 					<circle cx="22" cy="22" r="1">
 						<animate
 							attributeName="r"

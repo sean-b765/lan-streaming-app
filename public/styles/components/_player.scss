@@ -68,9 +68,26 @@
 			left: 0;
 			width: 100%;
 			height: auto;
-			padding: 2rem 2rem;
+			padding: 1rem 2rem;
 			align-items: center;
 			background: rgba(0, 0, 0, 0.445);
+
+			&__timestamp {
+				position: relative;
+				color: white;
+				margin-bottom: 1rem;
+				> span {
+					margin: 0 3px;
+					font-size: 1.1rem;
+				}
+			}
+
+			.seek-ts {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			}
 
 			.vol-fs {
 				display: flex;
@@ -122,6 +139,18 @@
 			}
 
 			&__volume {
+				display: flex;
+				flex-direction: row;
+
+				&__indicator {
+					margin-right: 0.5rem;
+					font-size: 1.7rem;
+					color: white;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+				}
 			}
 
 			&__fullscreen {

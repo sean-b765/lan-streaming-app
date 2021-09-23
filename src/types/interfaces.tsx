@@ -1,3 +1,5 @@
+import { MediaActions } from './enums'
+
 interface BaseMedia {
 	_id: string
 	path: string
@@ -20,3 +22,8 @@ export interface IMedia extends BaseMedia {
 }
 
 export interface ISeries extends BaseMedia {}
+
+export interface IAction {
+	type: MediaActions
+	payload: any
+}

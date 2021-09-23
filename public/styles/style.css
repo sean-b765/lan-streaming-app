@@ -84,11 +84,38 @@
   left: 0;
   width: 100%;
   height: auto;
-  padding: 2rem 2rem;
+  padding: 1rem 2rem;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   background: rgba(0, 0, 0, 0.445);
+}
+
+.player__controls__main__timestamp {
+  position: relative;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.player__controls__main__timestamp > span {
+  margin: 0 3px;
+  font-size: 1.1rem;
+}
+
+.player__controls__main .seek-ts {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .player__controls__main .vol-fs {
@@ -150,6 +177,32 @@
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   top: 50%;
+}
+
+.player__controls__main__volume {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.player__controls__main__volume__indicator {
+  margin-right: 0.5rem;
+  font-size: 1.7rem;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  cursor: pointer;
 }
 
 .player__controls > .btn--pause-play {

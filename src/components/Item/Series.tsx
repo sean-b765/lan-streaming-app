@@ -1,6 +1,7 @@
 import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
 import { ISeries } from '../../types/interfaces'
+import { api_url } from '../../util/constants'
 
 const Series: React.FC<{
 	key: number
@@ -11,7 +12,16 @@ const Series: React.FC<{
 		<div
 			className="list__series"
 			key={key}
-			onClick={(e) => {
+			onClick={async (e) => {
+				if (serie.series) {
+					fetch(`${api_url}/files/season/${serie._id}`)
+						.then((res) => res.json())
+						.then((res) => {
+							console.log(res)
+						})
+						.catch((err) => {})
+				}
+
 				const target = e.target as HTMLElement
 
 				if (target.classList.contains('btn')) return
