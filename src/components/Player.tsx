@@ -7,7 +7,6 @@ import {
 	IoIosPlay,
 	IoMdVolumeHigh,
 	IoMdVolumeLow,
-	IoMdVolumeMute,
 	IoMdVolumeOff,
 } from 'react-icons/io'
 import { BiArrowBack } from 'react-icons/bi'
@@ -15,7 +14,6 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { isMobile } from 'react-device-detect'
 import { useIdleTimer } from 'react-idle-timer'
 import Loader from './Loader'
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants'
 
 const Player: React.FC<{
 	media: IMedia
@@ -41,7 +39,7 @@ const Player: React.FC<{
 	// the container needs to be fullscreen rather than just the video.
 	//  this lets you overlay elements while in fullscreen mode
 	const containerRef = useRef<HTMLDivElement>(null)
-
+	const controlsMainRef = useRef<HTMLDivElement>(null)
 	// ref for the seeker element
 	const seekerRef = useRef<HTMLDivElement>(null)
 
@@ -70,8 +68,15 @@ const Player: React.FC<{
 		'KeyM',
 	]
 
+	// key press shortcuts
 	window.onkeyup = (e) => {
 		if (!allowedShortcutKeys.includes(e.code)) return
+
+		if (!active && !isFullScreen) {
+			// only allow fullscreen shortcut if player is in small-mode
+			if (e.code === 'KeyF') requestFullScreen()
+			return
+		}
 
 		const time = duration * progressPct
 
@@ -106,10 +111,6 @@ const Player: React.FC<{
 		}
 	}
 
-	window.onmouseup = () => {
-		if (seeking) setSeeking(false)
-	}
-
 	// Set fullscreen state variable
 	document.addEventListener('fullscreenchange', (e) => {
 		if (document.fullscreenElement) setIsFullScreen(true)
@@ -123,7 +124,7 @@ const Player: React.FC<{
 
 	const formatTime = (value: number): string => {
 		let hours: any = Math.max(0, Math.floor(value / (60 * 60))).toFixed(0)
-		let mins: any = Math.max(0, Math.floor(value / 60)).toFixed(0)
+		let mins: any = Math.max(0, Math.floor((value % (60 * 60)) / 60)).toFixed(0)
 		let secs: any = Number(value % 60).toFixed(0)
 
 		hours = hours === 0 ? '0:' : `${hours}:`
@@ -212,10 +213,11 @@ const Player: React.FC<{
 			{buffering && <Loader />}
 			<div
 				ref={containerRef}
-				style={idle ? { cursor: 'none' } : {}}
 				className={
 					active || isFullScreen
-						? 'player player--active'
+						? idle
+							? 'player player--active player--idle'
+							: 'player player--active'
 						: 'player player--small'
 				}
 			>
@@ -245,21 +247,59 @@ const Player: React.FC<{
 					ref={playerRef}
 					onError={() => {}}
 				></video>
+
+				{/* 
+					paused / idle overlay 
+					show episodes when paused and NOT idle
+				*/}
+
+				<div
+					className={
+						!playing && (active || isFullScreen)
+							? 'player__overlay'
+							: 'player__overlay player__overlay--hidden'
+					}
+				>
+					<div
+						className="player__overlay__backdrop"
+						style={{ backgroundImage: `url(${media.backdrop})` }}
+					></div>
+					<div className="player__overlay__info">
+						<h1>
+							{media.displayName && media.displayName}
+							{!media.displayName && media.name && media.name}
+						</h1>
+						{media.episode ||
+							(media.episodeName && (
+								<h2>
+									{media.episodeName
+										? media.episodeName
+										: media.episode && media.episode}
+								</h2>
+							))}
+						{media.description && (
+							<p>
+								{idle
+									? media.description
+									: `${media.description.substring(0, 80)}${
+											media.description.length > 80 && `...`
+									  }`}
+							</p>
+						)}
+						<span>{Math.round(progressPct * 100).toFixed(0)}% complete</span>
+					</div>
+					{false && <div className="player__overlay__current-series"></div>}
+				</div>
+
 				{/* Fullscreen player controls */}
 				{(isFullScreen || active) && (
-					<div
-						className={
-							idle
-								? 'player__controls player__controls--idle'
-								: 'player__controls'
-						}
-					>
+					<div className="player__controls">
 						<button className="btn btn--pause-play" onClick={pausePlay}>
 							{playing ? <IoIosPause /> : <IoIosPlay />}
 						</button>
 
 						{/* Seek, volume, fullscreen, etc */}
-						<div className="player__controls__main">
+						<div className="player__controls__main" ref={controlsMainRef}>
 							<div className="seek-ts">
 								<div className="player__controls__main__timestamp">
 									<span className="currentTime">

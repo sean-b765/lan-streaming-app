@@ -4,6 +4,7 @@
 	max-width: 100vw;
 	max-height: 100vh;
 	transition: all 0.34s cubic-bezier(0.075, 0.82, 0.165, 1);
+	overflow: hidden;
 
 	&--small {
 		right: 0;
@@ -45,10 +46,111 @@
 		background: black;
 	}
 
+	&--idle {
+		cursor: none;
+
+		.player__overlay {
+			max-width: 100%;
+			width: 100%;
+			height: 100% !important;
+			max-height: 100% !important;
+
+			&__backdrop {
+				min-height: 100%;
+				min-width: 100%;
+				background-size: cover;
+				background-position: center;
+			}
+		}
+		.player__controls {
+			opacity: 0 !important;
+		}
+	}
+
 	&__video {
 		position: absolute;
 		width: 100%;
 		height: 100%;
+	}
+
+	&__overlay {
+		position: absolute;
+		padding: 1rem 2rem;
+		width: 40%;
+		max-width: 30%;
+		height: 100%;
+		max-height: 30%;
+		right: 0;
+		opacity: 1;
+		transition: all 0.38s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+		color: white;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+
+		&__info {
+			position: relative;
+			text-align: center;
+			z-index: 1;
+			max-width: 1000px;
+			h1 {
+				margin: 2rem 1rem 1rem 1rem;
+				font-family: 'Bebas Neue', cursive !important;
+				font-size: 2.5rem;
+				letter-spacing: 2px;
+			}
+			h2 {
+				font-style: italic;
+				font-family: 'Bebas Neue', cursive !important;
+				margin-bottom: 1rem;
+				letter-spacing: 4px;
+			}
+		}
+
+		&__backdrop {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+
+			img {
+				position: absolute;
+				height: auto;
+				inset: 0;
+				width: 100%;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			&::after {
+				content: '';
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				inset: 0;
+				z-index: 1;
+				background: rgba(0, 0, 0, 0.63);
+			}
+			&::before {
+				content: '';
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				inset: 0;
+				z-index: 1;
+				box-shadow: inset 0 0 70px black;
+			}
+		}
+
+		&--hidden {
+			right: -100vh;
+			opacity: 0;
+		}
 	}
 
 	&__controls {
@@ -57,10 +159,6 @@
 		width: 100%;
 		height: 100%;
 		transition: all 0.37s cubic-bezier(0.215, 0.61, 0.355, 1);
-
-		&--idle {
-			opacity: 0;
-		}
 
 		&__main {
 			position: absolute;
@@ -152,9 +250,6 @@
 					cursor: pointer;
 				}
 			}
-
-			&__fullscreen {
-			}
 		}
 
 		> .btn--pause-play {
@@ -193,6 +288,12 @@
 				top: 0;
 				padding: 0.5rem 0.5rem 1rem 1rem !important;
 			}
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		&__overlay {
+			display: none;
 		}
 	}
 }
