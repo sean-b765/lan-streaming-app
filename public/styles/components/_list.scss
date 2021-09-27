@@ -2,7 +2,6 @@
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	overflow: auto;
 	grid-auto-flow: row;
 
 	&__info {
@@ -12,6 +11,9 @@
 	}
 
 	&--series {
+	}
+
+	&--episodes {
 	}
 
 	> header {
@@ -62,6 +64,7 @@
 		border-radius: 0.5rem;
 		overflow: hidden;
 		min-height: 350px;
+		box-shadow: 4px 21px 35px 0px rgba(0, 0, 0, 0.75);
 		min-width: 0;
 
 		&__item {
@@ -112,6 +115,18 @@
 				align-items: center;
 				justify-content: center;
 				transition: 0.43s all cubic-bezier(0.19, 1, 0.22, 1);
+
+				&--green {
+					color: rgb(63, 168, 63);
+				}
+
+				&--orange {
+					color: rgb(236, 188, 83);
+				}
+
+				&--red {
+					color: rgb(197, 52, 52);
+				}
 
 				> svg {
 					font-size: 0.9rem;
