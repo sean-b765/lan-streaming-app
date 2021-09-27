@@ -23,6 +23,8 @@ export interface IMedia extends BaseMedia {
 
 export interface ISeries extends BaseMedia {}
 
+export interface ISeason extends BaseMedia {}
+
 export interface IAction {
 	type: MediaActions
 	payload: any

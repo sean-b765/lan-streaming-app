@@ -2,14 +2,14 @@ import React, { ReactElement, useEffect } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { ISeries } from '../../types/interfaces'
 import { disableScrolling, enableScrolling } from '../../util/scroll'
+import ViewSeasons from '../ViewSeasons'
 import ViewSeries from '../ViewSeries'
 
 const ModalSeasons: React.FC<{
-	media: ISeries[]
 	showing: boolean
 	setShowing: Function
 	infoElements?: ReactElement
-}> = ({ media, showing, setShowing, infoElements }) => {
+}> = ({ showing, setShowing, infoElements }) => {
 	useEffect(() => {
 		if (showing) disableScrolling()
 		else enableScrolling()
@@ -21,7 +21,7 @@ const ModalSeasons: React.FC<{
 				showing ? 'modal modal--seasons modal--active' : 'modal modal--seasons'
 			}
 		>
-			<ViewSeries
+			<ViewSeasons
 				headerChild={
 					<header>
 						<section className="list__info">{infoElements}</section>
@@ -35,7 +35,6 @@ const ModalSeasons: React.FC<{
 						</div>
 					</header>
 				}
-				series={media}
 				setModalShowing={setShowing}
 			/>
 		</div>

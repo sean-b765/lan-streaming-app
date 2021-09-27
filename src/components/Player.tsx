@@ -14,15 +14,23 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { isMobile } from 'react-device-detect'
 import { useIdleTimer } from 'react-idle-timer'
 import Loader from './Loader'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { MediaActions } from '../types/enums'
 
 const Player: React.FC<{
-	media: IMedia
-	setMedia: Function
 	active: boolean
 	setActive: Function
 	canEnableScroll: boolean
 	playerRef: RefObject<HTMLVideoElement>
-}> = ({ media, setMedia, playerRef, active, setActive, canEnableScroll }) => {
+	volume: number
+	setVolume: Function
+}> = ({ playerRef, active, setActive, canEnableScroll, volume, setVolume }) => {
+	const dispatch = useDispatch()
+
+	const media = useSelector(
+		(state: RootStateOrAny) => state.media.media.current
+	)
+
 	const [idle, setIdle] = useState<boolean>(false)
 
 	const [playing, setPlaying] = useState<boolean>(false)
@@ -30,7 +38,6 @@ const Player: React.FC<{
 	const [seeking, setSeeking] = useState(false)
 
 	const [duration, setDuration] = useState(0)
-	const [volume, setVolume] = useState(1)
 	const [lastVolumeBeforeMute, setLastVolumeBeforeMute] = useState(1)
 
 	const [progressPct, setProgressPct] = useState(0)
@@ -415,7 +422,12 @@ const Player: React.FC<{
 					</button>
 
 					{!isFullScreen && !active && (
-						<button className="btn btn--close" onClick={() => setMedia(null)}>
+						<button
+							className="btn btn--close"
+							onClick={() => {
+								dispatch({ type: MediaActions.SET_CURRENT_MEDIA, payload: {} })
+							}}
+						>
 							{!active && <AiOutlineClose />}
 						</button>
 					)}

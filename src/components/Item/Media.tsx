@@ -1,12 +1,14 @@
 import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
+import { useDispatch } from 'react-redux'
+import { MediaActions } from '../../types/enums'
 import { IMedia } from '../../types/interfaces'
 
 const Media: React.FC<{
 	key: number
-	setMedia: Function
 	media: IMedia
-}> = ({ key, setMedia, media }) => {
+}> = ({ key, media }) => {
+	const dispatch = useDispatch()
 	return (
 		media && (
 			<div
@@ -16,11 +18,20 @@ const Media: React.FC<{
 					const target = e.target as HTMLElement
 					if (target.classList.contains('btn')) return
 
-					setMedia(media)
+					// dispatch -> set current media
+					dispatch({ type: MediaActions.SET_CURRENT_MEDIA, payload: media })
 				}}
 			>
 				<div className="list__media__item">
-					<span className="rating">
+					<span
+						className={
+							media.vote_average >= 8
+								? 'rating rating--green'
+								: media.vote_average >= 6
+								? 'rating rating--orange'
+								: 'rating rating--red'
+						}
+					>
 						<AiFillStar />
 						{media.vote_average}
 					</span>
@@ -38,7 +49,7 @@ const Media: React.FC<{
 							{media.date}
 						</span>
 						<span>
-							{media.description.length > 35
+							{media?.description?.length > 35
 								? `${media?.description?.substring(0, 70)}...`
 								: media?.description}
 						</span>

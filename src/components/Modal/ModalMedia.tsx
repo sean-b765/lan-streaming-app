@@ -5,12 +5,10 @@ import { disableScrolling, enableScrolling } from '../../util/scroll'
 import ViewMedia from '../ViewMedia'
 
 const ModalMedia: React.FC<{
-	media: IMedia[]
-	setMedia: Function
 	showing: boolean
 	setShowing: Function
 	infoElements?: ReactElement
-}> = ({ media, setMedia, showing, setShowing, infoElements: infoElements }) => {
+}> = ({ showing, setShowing, infoElements: infoElements }) => {
 	useEffect(() => {
 		if (showing) disableScrolling()
 		else enableScrolling()
@@ -36,8 +34,6 @@ const ModalMedia: React.FC<{
 						</div>
 					</header>
 				}
-				medias={media}
-				setMedia={setMedia}
 			/>
 		</div>
 	)

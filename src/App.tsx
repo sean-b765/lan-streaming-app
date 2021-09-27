@@ -6,26 +6,22 @@ import ViewMedia from './components/ViewMedia'
 import ViewSeries from './components/ViewSeries'
 import { IMedia, ISeries } from './types/interfaces'
 import { useIdleTimer } from 'react-idle-timer'
+import { RootStateOrAny, useSelector } from 'react-redux'
 
 const App: React.FC = () => {
 	const playerRef = useRef<HTMLVideoElement>(null)
-
-	const [medias, setMedias] = useState<IMedia[]>([])
-	const [series, setSeries] = useState<ISeries[]>([])
-
-	// The media
-	const [modalMedia, setModalMedia] = useState<IMedia[]>([])
-	// The seasons contained in a series
-	const [modalSeasons, setModalSeasons] = useState<ISeries[]>([])
 
 	// Show modal
 	const [modalMediaShowing, setModalMediaShowing] = useState<boolean>(false)
 	const [modalSeasonsShowing, setModalSeasonsShowing] = useState<boolean>(false)
 
-	// current playing item
-	const [currentMedia, setCurrentMedia] = useState<IMedia | any>(null)
-	// currently selected series
-	const [currentSeries, setCurrentSeries] = useState<ISeries | any>(null)
+	const currentMedia = useSelector(
+		(state: RootStateOrAny) => state.media.media.current
+	)
+
+	const currentSeries = useSelector(
+		(state: RootStateOrAny) => state.media.series.current
+	)
 
 	// Reflects whether the player is active or not
 	const [playerActive, setPlayerActive] = useState<boolean>(false)
@@ -39,18 +35,10 @@ const App: React.FC = () => {
 		'Stream'
 
 	useEffect(() => {
-		console.log('triggered')
-		fetch('http://192.168.1.7:5000/files/media')
-			.then((res) => res.json())
-			.then((res) => {
-				setMedias(res)
-			})
-
-		fetch('http://192.168.1.7:5000/files/series')
-			.then((res) => res.json())
-			.then((res) => {
-				setSeries(res)
-			})
+		// get volume from localStorage
+		return () => {
+			// set volume in localStorage
+		}
 	}, [])
 
 	return (
@@ -62,22 +50,16 @@ const App: React.FC = () => {
 				setActive={(val: boolean) => {
 					setPlayerActive(val)
 				}}
-				media={currentMedia}
-				setMedia={setCurrentMedia}
+				volume={volume}
+				setVolume={setVolume}
 			/>
 
 			<ModalMedia
 				infoElements={
 					<>
-						<h2>Movies</h2>
-						<p>
-							{currentSeries?.displayName && currentSeries?.displayName}
-							{currentSeries?.name && currentSeries?.name}
-						</p>
+						<h2>{currentSeries?.displayName || currentSeries?.name}</h2>
 					</>
 				}
-				media={modalMedia}
-				setMedia={(val: IMedia) => setCurrentMedia(val)}
 				showing={modalMediaShowing}
 				setShowing={(value: boolean) => {
 					setModalMediaShowing(value)
@@ -85,14 +67,9 @@ const App: React.FC = () => {
 			/>
 
 			<ModalSeasons
-				media={modalSeasons}
 				infoElements={
 					<>
-						<h2>Seasons</h2>
-						<p>
-							{currentSeries?.displayName && currentSeries?.displayName}
-							{currentSeries?.name && currentSeries?.name}
-						</p>
+						<h2>{currentSeries?.name || currentSeries?.displayName}</h2>
 					</>
 				}
 				setShowing={setModalSeasonsShowing}
@@ -105,8 +82,6 @@ const App: React.FC = () => {
 						<h2>MOVIES</h2>
 					</header>
 				}
-				medias={medias}
-				setMedia={setCurrentMedia}
 			/>
 
 			<ViewSeries
@@ -115,25 +90,7 @@ const App: React.FC = () => {
 						<h2>SERIES</h2>
 					</header>
 				}
-				series={series}
-				setModalShowing={async (value: boolean, serie: ISeries | IMedia) => {
-					// Get the seasons of this series
-					const { result, isMedia } = await (
-						await fetch(`http://192.168.1.7:5000/files/series/${serie._id}`)
-					).json()
-
-					setCurrentSeries(serie)
-
-					if (isMedia) {
-						// Set modal media
-						setModalMedia(result)
-						setModalMediaShowing(value)
-					} else {
-						// set modal seasons
-						setModalSeasons(result)
-						setModalSeasonsShowing(value)
-					}
-				}}
+				setModalShowing={() => setModalSeasonsShowing(!modalSeasonsShowing)}
 			/>
 		</div>
 	)

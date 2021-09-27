@@ -4,9 +4,9 @@ import { ISeries } from '../../types/interfaces'
 import { api_url } from '../../util/constants'
 
 const Series: React.FC<{
+	serie: ISeries
 	key: number
 	setShowing: Function
-	serie: ISeries
 }> = ({ key, setShowing, serie }) => {
 	return (
 		<div
@@ -14,6 +14,7 @@ const Series: React.FC<{
 			key={key}
 			onClick={async (e) => {
 				if (serie.series) {
+					// Get seasons
 					fetch(`${api_url}/files/season/${serie._id}`)
 						.then((res) => res.json())
 						.then((res) => {
@@ -25,12 +26,20 @@ const Series: React.FC<{
 				const target = e.target as HTMLElement
 
 				if (target.classList.contains('btn')) return
-				setShowing(true, serie)
+				setShowing(true)
 			}}
 		>
 			<div className="list__series__item">
 				{serie.vote_average && (
-					<span className="rating">
+					<span
+						className={
+							serie.vote_average >= 8
+								? 'rating rating--green'
+								: serie.vote_average >= 6
+								? 'rating rating--orange'
+								: 'rating rating--red'
+						}
+					>
 						<AiFillStar />
 						{serie.vote_average}
 					</span>
@@ -60,7 +69,11 @@ const Series: React.FC<{
 
 				<div
 					className="list__series__item__thumbnail"
-					style={{ backgroundImage: `url(${serie.poster})` }}
+					style={{
+						backgroundImage: `url(${
+							serie.poster ? serie.poster : serie.artwork
+						})`,
+					}}
 				></div>
 			</div>
 		</div>
