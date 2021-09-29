@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
-import { IMedia } from '../types/interfaces'
+import { IMedia } from '../../types/interfaces'
 import { RiFullscreenExitLine, RiFullscreenLine } from 'react-icons/ri'
-import { disableScrolling, enableScrolling } from '../util/scroll'
+import { disableScrolling, enableScrolling } from '../../util/scroll'
 import {
 	IoIosPause,
 	IoIosPlay,
@@ -13,9 +13,9 @@ import { BiArrowBack } from 'react-icons/bi'
 import { AiOutlineClose } from 'react-icons/ai'
 import { isMobile } from 'react-device-detect'
 import { useIdleTimer } from 'react-idle-timer'
-import Loader from './Loader'
+import Loader from '../Loader'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { MediaActions } from '../types/enums'
+import { MediaActions } from '../../types/enums'
 
 const Player: React.FC<{
 	active: boolean
@@ -29,6 +29,13 @@ const Player: React.FC<{
 
 	const media = useSelector(
 		(state: RootStateOrAny) => state.media.media.current
+	)
+
+	const series = useSelector(
+		(state: RootStateOrAny) => state.media.series.current
+	)
+	const season = useSelector(
+		(state: RootStateOrAny) => state.media.seasons.current
 	)
 
 	const [idle, setIdle] = useState<boolean>(false)
@@ -215,6 +222,34 @@ const Player: React.FC<{
 		}
 	}
 
+	/*
+		Formatting media properties
+	*/
+
+	const formatName = () => {
+		if (media.displayName) return media.displayName
+
+		if (season && series && season.series === series._id)
+			return `${series.name}`
+		else return `${media.displayName || media.name}`
+	}
+
+	const formatEpisodeName = () => {
+		if (!media.episode && !media.episodeName) return ''
+
+		if (season && series && season.series === series._id)
+			return `${season.name} Episode ${media.episode}`
+		else return `${media.episodeName}`
+	}
+
+	const formatArtwork = () => {
+		if (media.backdrop) return media.backdrop
+
+		if (season && series && season.series === series._id)
+			return season.artwork || series.backdrop
+		else return media.backdrop
+	}
+
 	return media?._id ? (
 		<>
 			{buffering && <Loader />}
@@ -269,21 +304,15 @@ const Player: React.FC<{
 				>
 					<div
 						className="player__overlay__backdrop"
-						style={{ backgroundImage: `url(${media.backdrop})` }}
+						style={{
+							backgroundImage: `url(${formatArtwork()})`,
+						}}
 					></div>
 					<div className="player__overlay__info">
-						<h1>
-							{media.displayName && media.displayName}
-							{!media.displayName && media.name && media.name}
-						</h1>
-						{media.episode ||
-							(media.episodeName && (
-								<h2>
-									{media.episodeName
-										? media.episodeName
-										: media.episode && media.episode}
-								</h2>
-							))}
+						<h1>{formatName()}</h1>
+
+						<h2>{formatEpisodeName()}</h2>
+
 						{media.description && (
 							<p>
 								{idle

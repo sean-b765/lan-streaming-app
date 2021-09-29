@@ -1,32 +1,44 @@
 import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
+import { useDispatch } from 'react-redux'
+import { MediaActions } from '../../types/enums'
 import { ISeries } from '../../types/interfaces'
 import { api_url } from '../../util/constants'
+import { getAllFromSeason, getAllFromSeries } from '../../_actions/media'
 
 const Series: React.FC<{
 	serie: ISeries
 	key: number
 	setShowing: Function
 }> = ({ key, setShowing, serie }) => {
+	const dispatch = useDispatch()
+
 	return (
 		<div
 			className="list__series"
 			key={key}
 			onClick={async (e) => {
-				if (serie.series) {
-					// Get seasons
-					fetch(`${api_url}/files/season/${serie._id}`)
-						.then((res) => res.json())
-						.then((res) => {
-							console.log(res)
-						})
-						.catch((err) => {})
+				const result = await getAllFromSeries(serie._id)
+
+				if (result?.isMedia) {
+					// show movies
+					setShowing('media')
+					dispatch({
+						type: MediaActions.SET_CURRENT_SERIES,
+						payload: { series: serie, movies: result.result },
+					})
+				} else {
+					// show seasons
+					setShowing('seasons')
+					dispatch({
+						type: MediaActions.SET_CURRENT_SERIES,
+						payload: { series: serie, seasons: result.result },
+					})
 				}
 
 				const target = e.target as HTMLElement
 
 				if (target.classList.contains('btn')) return
-				setShowing(true)
 			}}
 		>
 			<div className="list__series__item">
@@ -57,14 +69,6 @@ const Series: React.FC<{
 							? `${serie?.description?.substring(0, 70)}...`
 							: serie?.description}
 					</span>
-					<button
-						className="btn btn--view-more"
-						onClick={() => {
-							console.log('viewmore')
-						}}
-					>
-						View More
-					</button>
 				</div>
 
 				<div

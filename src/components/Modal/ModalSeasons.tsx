@@ -1,15 +1,21 @@
 import React, { ReactElement, useEffect } from 'react'
+import { AiOutlineClose } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
+import { RootStateOrAny, useSelector } from 'react-redux'
 import { ISeries } from '../../types/interfaces'
 import { disableScrolling, enableScrolling } from '../../util/scroll'
-import ViewSeasons from '../ViewSeasons'
 import ViewSeries from '../ViewSeries'
+import ListSeasons from './List/ListSeasons'
 
 const ModalSeasons: React.FC<{
 	showing: boolean
 	setShowing: Function
-	infoElements?: ReactElement
-}> = ({ showing, setShowing, infoElements }) => {
+	setEpisodesShowing: Function
+}> = ({ showing, setShowing, setEpisodesShowing }) => {
+	const currentSeries = useSelector(
+		(state: RootStateOrAny) => state.media.series.current
+	)
+
 	useEffect(() => {
 		if (showing) disableScrolling()
 		else enableScrolling()
@@ -21,22 +27,10 @@ const ModalSeasons: React.FC<{
 				showing ? 'modal modal--seasons modal--active' : 'modal modal--seasons'
 			}
 		>
-			<ViewSeasons
-				headerChild={
-					<header>
-						<section className="list__info">{infoElements}</section>
-						<div className="navigation">
-							<button
-								className="btn btn--back"
-								onClick={() => setShowing(false)}
-							>
-								<BiArrowBack />
-							</button>
-						</div>
-					</header>
-				}
-				setModalShowing={setShowing}
-			/>
+			<button className="btn btn--close" onClick={() => setShowing(false)}>
+				<AiOutlineClose />
+			</button>
+			<ListSeasons setEpisodesShowing={setEpisodesShowing} />
 		</div>
 	)
 }

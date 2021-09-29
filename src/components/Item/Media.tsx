@@ -1,6 +1,6 @@
 import React from 'react'
 import { AiFillStar } from 'react-icons/ai'
-import { useDispatch } from 'react-redux'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MediaActions } from '../../types/enums'
 import { IMedia } from '../../types/interfaces'
 
@@ -9,6 +9,7 @@ const Media: React.FC<{
 	media: IMedia
 }> = ({ key, media }) => {
 	const dispatch = useDispatch()
+
 	return (
 		media && (
 			<div
@@ -23,24 +24,25 @@ const Media: React.FC<{
 				}}
 			>
 				<div className="list__media__item">
-					<span
-						className={
-							media.vote_average >= 8
-								? 'rating rating--green'
-								: media.vote_average >= 6
-								? 'rating rating--orange'
-								: 'rating rating--red'
-						}
-					>
-						<AiFillStar />
-						{media.vote_average}
-					</span>
-
+					{media.vote_average && (
+						<span
+							className={
+								media.vote_average >= 8
+									? 'rating rating--green'
+									: media.vote_average >= 6
+									? 'rating rating--orange'
+									: 'rating rating--red'
+							}
+						>
+							<AiFillStar />
+							{Number(media.vote_average).toFixed(1)}
+						</span>
+					)}
 					<header>
-						<h3>
+						<h2>
 							{media.displayName} {media.episodeName && media.episodeName}
-							{media.episode && media.episode}
-						</h3>
+						</h2>
+						<h3>{media.episode && `Episode ${media.episode}`}</h3>
 						<span>{media.duration}m</span>
 					</header>
 
@@ -53,14 +55,6 @@ const Media: React.FC<{
 								? `${media?.description?.substring(0, 70)}...`
 								: media?.description}
 						</span>
-						<button
-							className="btn btn--view-more"
-							onClick={() => {
-								console.log('viewmore')
-							}}
-						>
-							View More
-						</button>
 					</div>
 
 					<div

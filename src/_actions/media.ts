@@ -1,4 +1,9 @@
-import { _getFromSeries, _getMedia, _getSeries } from '../_services'
+import {
+	_getFromSeason,
+	_getFromSeries,
+	_getMedia,
+	_getSeries,
+} from '../_services'
 
 export const getMedia = async (filters: any = {}, sort: any = {}) => {
 	try {
@@ -21,6 +26,14 @@ export const getSeries = async (filters: any = {}, sort: any = {}) => {
 export const getAllFromSeries = async (id: string) => {
 	try {
 		return await _getFromSeries(id)
+	} catch (err) {
+		console.log(err)
+	}
+}
+
+export const getAllFromSeason = async (id: string) => {
+	try {
+		return await _getFromSeason(id)
 	} catch (err) {
 		console.log(err)
 	}

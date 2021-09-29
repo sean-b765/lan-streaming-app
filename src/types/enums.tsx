@@ -4,9 +4,15 @@ export enum MediaActions {
 
 	SET_ALL_SERIES = 'series/set_all',
 	SET_CURRENT_SERIES = 'series/set_current',
-	SET_MOVIES = 'series/movies/set_all',
+	SET_SERIES_MOVIES_ALL = 'series/movies/set_all',
 
 	SET_ALL_SEASONS = 'seasons/set_all',
 	SET_CURRENT_SEASON = 'seasons/set_current',
-	SET_ALL_EPISODES = 'seasons/episodes/set_all',
+	SET_SEASON_EPISODES_ALL = 'seasons/episodes/set_all',
+}
+
+export enum Page {
+	MOVIES = 'movies',
+	SERIES = 'series',
+	ALL = 'all',
 }

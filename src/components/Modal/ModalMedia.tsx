@@ -1,14 +1,19 @@
 import React, { ReactElement, useEffect } from 'react'
+import { AiOutlineClose } from 'react-icons/ai'
 import { BiArrowBack } from 'react-icons/bi'
+import { RootStateOrAny, useSelector } from 'react-redux'
 import { IMedia } from '../../types/interfaces'
 import { disableScrolling, enableScrolling } from '../../util/scroll'
-import ViewMedia from '../ViewMedia'
+import ListMedia from './List/ListMedia'
 
 const ModalMedia: React.FC<{
 	showing: boolean
 	setShowing: Function
-	infoElements?: ReactElement
-}> = ({ showing, setShowing, infoElements: infoElements }) => {
+}> = ({ showing, setShowing }) => {
+	const currentSeries = useSelector(
+		(state: RootStateOrAny) => state.media.series.current
+	)
+
 	useEffect(() => {
 		if (showing) disableScrolling()
 		else enableScrolling()
@@ -20,21 +25,10 @@ const ModalMedia: React.FC<{
 				showing ? 'modal modal--media modal--active' : 'modal modal--media'
 			}
 		>
-			<ViewMedia
-				headerChild={
-					<header>
-						<section className="list__info">{infoElements}</section>
-						<div className="navigation">
-							<button
-								className="btn btn--back"
-								onClick={() => setShowing(false)}
-							>
-								<BiArrowBack />
-							</button>
-						</div>
-					</header>
-				}
-			/>
+			<button className="btn btn--close" onClick={() => setShowing(false)}>
+				<AiOutlineClose />
+			</button>
+			<ListMedia />
 		</div>
 	)
 }
