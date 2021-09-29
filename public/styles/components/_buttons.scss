@@ -18,4 +18,31 @@
 	&:hover {
 		opacity: 1;
 	}
+
+	&--backToTop {
+		position: fixed;
+		z-index: 99999;
+		background: rgba(255, 255, 255, 0.897);
+		color: black;
+		border-radius: 50%;
+		left: 50%;
+		transform: translateX(-50%);
+		bottom: 0;
+		margin: 1rem 1rem 2rem 1rem;
+		cursor: pointer;
+		opacity: 0;
+		transition: all 0.4s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+
+		&--visible {
+			opacity: 1;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		&--backToTop {
+			transform: none;
+			left: 0;
+			margin-bottom: 4rem;
+		}
+	}
 }

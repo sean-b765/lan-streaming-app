@@ -57,6 +57,8 @@
 .player--active {
   width: 100vw;
   height: 100vh;
+  top: 0;
+  left: 0;
   background: black;
 }
 
@@ -368,7 +370,8 @@
   display: grid;
   -ms-grid-columns: (minmax(300px, 1fr))[auto-fit];
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-flow: row;
+  justify-items: center;
+  gap: 1rem;
 }
 
 .list > header {
@@ -390,7 +393,7 @@
 .list > header h2 {
   position: relative;
   color: white;
-  font-family: 'Cinzel Decorative', cursive;
+  font-family: 'Bebas Neue', cursive;
   width: auto;
   font-size: 2rem;
 }
@@ -416,21 +419,22 @@
           transform: translateX(-150%);
 }
 
-.list__media, .list__series {
+.list__media, .list__series, .list__season {
+  margin: 1rem;
+  min-height: 350px;
+  min-width: 300px;
+  max-width: 300px;
   background: #888888;
   background-size: cover;
   background-position: center;
-  margin: 1rem;
   cursor: pointer;
   border-radius: 0.5rem;
   overflow: hidden;
-  min-height: 350px;
   -webkit-box-shadow: 4px 21px 35px 0px rgba(0, 0, 0, 0.75);
           box-shadow: 4px 21px 35px 0px rgba(0, 0, 0, 0.75);
-  min-width: 0;
 }
 
-.list__media__item, .list__series__item {
+.list__media__item, .list__series__item, .list__season__item {
   padding: 1rem;
   position: relative;
   width: 100%;
@@ -440,7 +444,7 @@
   color: white;
 }
 
-.list__media__item__info, .list__series__item__info {
+.list__media__item__info, .list__series__item__info, .list__season__item__info {
   position: absolute;
   z-index: 3;
   height: 100%;
@@ -468,11 +472,11 @@
   transition: 0.5s all cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
-.list__media__item__info__release-date, .list__series__item__info__release-date {
+.list__media__item__info__release-date, .list__series__item__info__release-date, .list__season__item__info__release-date {
   margin-bottom: 10px;
 }
 
-.list__media__item .rating, .list__series__item .rating {
+.list__media__item .rating, .list__series__item .rating, .list__season__item .rating {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -492,24 +496,24 @@
   transition: 0.43s all cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.list__media__item .rating--green, .list__series__item .rating--green {
+.list__media__item .rating--green, .list__series__item .rating--green, .list__season__item .rating--green {
   color: #3fa83f;
 }
 
-.list__media__item .rating--orange, .list__series__item .rating--orange {
+.list__media__item .rating--orange, .list__series__item .rating--orange, .list__season__item .rating--orange {
   color: #ecbc53;
 }
 
-.list__media__item .rating--red, .list__series__item .rating--red {
+.list__media__item .rating--red, .list__series__item .rating--red, .list__season__item .rating--red {
   color: #c53434;
 }
 
-.list__media__item .rating > svg, .list__series__item .rating > svg {
+.list__media__item .rating > svg, .list__series__item .rating > svg, .list__season__item .rating > svg {
   font-size: 0.9rem;
   margin-right: 8px;
 }
 
-.list__media__item header, .list__series__item header {
+.list__media__item header, .list__series__item header, .list__season__item header {
   text-align: center;
   position: relative;
   max-width: 100%;
@@ -530,11 +534,11 @@
           flex-direction: column;
 }
 
-.list__media__item header > h3, .list__series__item header > h3 {
+.list__media__item header > h3, .list__series__item header > h3, .list__season__item header > h3 {
   margin-bottom: 0.7rem;
 }
 
-.list__media__item__thumbnail, .list__series__item__thumbnail {
+.list__media__item__thumbnail, .list__series__item__thumbnail, .list__season__item__thumbnail {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -549,7 +553,7 @@
   transition: 0.43s all cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.list__media__item__thumbnail::after, .list__series__item__thumbnail::after {
+.list__media__item__thumbnail::after, .list__series__item__thumbnail::after, .list__season__item__thumbnail::after {
   content: '';
   position: absolute;
   width: 100%;
@@ -563,29 +567,41 @@
 }
 
 .list__media__item:hover .list__media__item__info,
-.list__media__item:hover .list__series__item__info, .list__series__item:hover .list__media__item__info,
-.list__series__item:hover .list__series__item__info {
+.list__media__item:hover .list__series__item__info,
+.list__media__item:hover .list__season__item__info, .list__series__item:hover .list__media__item__info,
+.list__series__item:hover .list__series__item__info,
+.list__series__item:hover .list__season__item__info, .list__season__item:hover .list__media__item__info,
+.list__season__item:hover .list__series__item__info,
+.list__season__item:hover .list__season__item__info {
   top: 0;
 }
 
-.list__media__item:hover .rating, .list__series__item:hover .rating {
+.list__media__item:hover .rating, .list__series__item:hover .rating, .list__season__item:hover .rating {
   opacity: 0;
 }
 
-.list__media__item:hover header h3, .list__series__item:hover header h3 {
+.list__media__item:hover header h3, .list__series__item:hover header h3, .list__season__item:hover header h3 {
   text-shadow: 0 0 15px rgba(0, 0, 0, 0.753), 0 0 10px black;
 }
 
 .list__media__item:hover .list__media__item__thumbnail,
-.list__media__item:hover .list__series__item__thumbnail, .list__series__item:hover .list__media__item__thumbnail,
-.list__series__item:hover .list__series__item__thumbnail {
+.list__media__item:hover .list__series__item__thumbnail,
+.list__media__item:hover .list__season__item__thumbnail, .list__series__item:hover .list__media__item__thumbnail,
+.list__series__item:hover .list__series__item__thumbnail,
+.list__series__item:hover .list__season__item__thumbnail, .list__season__item:hover .list__media__item__thumbnail,
+.list__season__item:hover .list__series__item__thumbnail,
+.list__season__item:hover .list__season__item__thumbnail {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
 }
 
 .list__media__item:hover .list__media__item__thumbnail::after,
-.list__media__item:hover .list__series__item__thumbnail::after, .list__series__item:hover .list__media__item__thumbnail::after,
-.list__series__item:hover .list__series__item__thumbnail::after {
+.list__media__item:hover .list__series__item__thumbnail::after,
+.list__media__item:hover .list__season__item__thumbnail::after, .list__series__item:hover .list__media__item__thumbnail::after,
+.list__series__item:hover .list__series__item__thumbnail::after,
+.list__series__item:hover .list__season__item__thumbnail::after, .list__season__item:hover .list__media__item__thumbnail::after,
+.list__season__item:hover .list__series__item__thumbnail::after,
+.list__season__item:hover .list__season__item__thumbnail::after {
   opacity: 0.5;
 }
 
@@ -618,17 +634,114 @@
   opacity: 1;
 }
 
+.btn--backToTop {
+  position: fixed;
+  z-index: 99999;
+  background: rgba(255, 255, 255, 0.897);
+  color: black;
+  border-radius: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  bottom: 0;
+  margin: 1rem 1rem 2rem 1rem;
+  cursor: pointer;
+  opacity: 0;
+  -webkit-transition: all 0.4s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+  transition: all 0.4s cubic-bezier(0.895, 0.03, 0.685, 0.22);
+}
+
+.btn--backToTop--visible {
+  opacity: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .btn--backToTop {
+    -webkit-transform: none;
+            transform: none;
+    left: 0;
+    margin-bottom: 4rem;
+  }
+}
+
 .modal {
   position: fixed;
   z-index: 999;
   width: 100vw;
   min-height: 100vh;
-  max-height: 100vh;
   top: 100vh;
   opacity: 0;
   background: #1a1a24;
   -webkit-transition: all 0.8s cubic-bezier(1, -0.07, 0, 1.08);
   transition: all 0.8s cubic-bezier(1, -0.07, 0, 1.08);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal--episodes {
+  z-index: 9999;
+}
+
+.modal > .btn--close {
+  position: absolute;
+  font-size: 2rem;
+  right: 0;
+  z-index: 10;
+}
+
+.modal > .list {
+  position: absolute;
+  width: 100%;
+}
+
+.modal__info {
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: white;
+  padding: 0 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 40vh;
+  isolation: isolate;
+  -webkit-box-shadow: inset 0 0 70px black;
+          box-shadow: inset 0 0 70px black;
+  overflow: hidden;
+}
+
+.modal__info::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal__info h1 {
+  margin: 2rem 1rem 1rem 1rem;
+  font-family: 'Bebas Neue', cursive !important;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.modal__info p {
+  max-width: 800px;
+  text-align: center;
 }
 
 .modal--active {
@@ -640,21 +753,17 @@
   position: fixed;
 }
 
-.modal--media .list, .modal--seasons .list {
-  max-height: 100vh;
-}
-
-.modal--media .list > header, .modal--seasons .list > header {
+.modal--media .list > header, .modal--seasons .list > header, .modal--episodes .list > header {
   position: relative;
 }
 
-.modal--media .list > header .navigation, .modal--seasons .list > header .navigation {
+.modal--media .list > header .navigation, .modal--seasons .list > header .navigation, .modal--episodes .list > header .navigation {
   position: absolute;
   right: 0;
   top: 0;
 }
 
-.modal--media .list > header .navigation > .btn, .modal--seasons .list > header .navigation > .btn {
+.modal--media .list > header .navigation > .btn, .modal--seasons .list > header .navigation > .btn, .modal--episodes .list > header .navigation > .btn {
   padding: 2rem 2rem 0.5rem 0.5rem;
   font-size: 1.6rem;
 }
@@ -681,12 +790,99 @@
   border-radius: 50%;
 }
 
+.navbar {
+  position: relative;
+  top: 0;
+  right: 0;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.navbar h1 {
+  padding: 0 2rem;
+  font-family: 'Bebas Neue', cursive;
+}
+
+.navbar ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.navbar ul li {
+  position: relative;
+  font-size: 1.4rem;
+  list-style: none;
+  margin: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  font-family: 'Bebas Neue', cursive;
+  opacity: 0.95;
+  -webkit-transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.navbar ul li.active {
+  opacity: 0.7;
+}
+
+.navbar ul li::after {
+  content: '';
+  position: absolute;
+  background: white;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  z-index: -1;
+  opacity: 1;
+  -webkit-transition: all 0.26s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transition: all 0.26s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.navbar ul li:hover {
+  color: dimgray;
+}
+
+.navbar ul li:hover::after {
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .navbar h1 {
+    margin-top: 2rem;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Noto Sans Display', sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -695,7 +891,7 @@ body {
 
 @-moz-document url-prefix() {
   html,
-  .list {
+  .modal {
     scrollbar-color: #1537df #ffffff;
     scrollbar-width: thin;
   }

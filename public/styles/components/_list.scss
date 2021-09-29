@@ -2,7 +2,8 @@
 	position: relative;
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-auto-flow: row;
+	justify-items: center;
+	gap: 1rem;
 
 	&__info {
 	}
@@ -28,7 +29,7 @@
 		h2 {
 			position: relative;
 			color: white;
-			font-family: 'Cinzel Decorative', cursive;
+			font-family: 'Bebas Neue', cursive;
 			width: auto;
 			font-size: 2rem;
 
@@ -55,17 +56,19 @@
 	}
 
 	&__media,
-	&__series {
+	&__series,
+	&__season {
+		margin: 1rem;
+		min-height: 350px;
+		min-width: 300px;
+		max-width: 300px;
 		background: rgb(136, 136, 136);
 		background-size: cover;
 		background-position: center;
-		margin: 1rem;
 		cursor: pointer;
 		border-radius: 0.5rem;
 		overflow: hidden;
-		min-height: 350px;
 		box-shadow: 4px 21px 35px 0px rgba(0, 0, 0, 0.75);
-		min-width: 0;
 
 		&__item {
 			padding: 1rem;
@@ -185,7 +188,8 @@
 
 			&:hover {
 				.list__media__item__info,
-				.list__series__item__info {
+				.list__series__item__info,
+				.list__season__item__info {
 					top: 0;
 				}
 				.rating {
@@ -197,7 +201,8 @@
 					}
 				}
 				.list__media__item__thumbnail,
-				.list__series__item__thumbnail {
+				.list__series__item__thumbnail,
+				.list__season__item__thumbnail {
 					transform: scale(1.1);
 
 					&::after {
