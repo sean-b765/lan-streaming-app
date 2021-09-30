@@ -1,14 +1,28 @@
-# Getting Started with Create React App
+# Local network streaming app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Prerequisites
 
-## Available Scripts
+- MongoDB installed and running
+- Correct folder structure
+- Express backend running
+
+[View server code](https://github.com/sean-b765/media-streaming-server)
+
+### `npm i`
+
+Installs the dependencies
+
+### `npm start`
+
+Starts the client
+
+## Getting Started with Create React App
 
 In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
