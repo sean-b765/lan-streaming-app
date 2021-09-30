@@ -1,12 +1,42 @@
 # Local network streaming app
 
-Prerequisites
+## Prerequisites
 
 - MongoDB installed and running
-- Correct folder structure
+- [Correct folder structure](https://github.com/sean-b765/media-streaming-server#initialization)
 - Express backend running
 
-[View server code](https://github.com/sean-b765/media-streaming-server)
+## Demo
+
+Demo of the player in desktop view
+![Player](./demos/player.gif)
+Demo of the navigation in mobile view
+![Navigation](./demos/series.gif)
+
+## Setup
+
+The end result must be structured like:
+
+local-streaming-app/server
+local-streaming-app/client
+local-streaming-app/Media
+
+### Server
+
+[View server repository](https://github.com/sean-b765/media-streaming-server)
+Following the steps from the above link,
+
+1. Create a [TMDB developer account](https://developers.themoviedb.org/3/getting-started/introduction) to get your API key. Alternatively, use my key: `6a2ae44babf3ff78b6e4d09363704281`
+   - _TMDB does not rate limit the key itself, but the IP making the request_. You may have issues if you initialize your database too often, or if you have a large media collection.
+2. Rename the `.env.example` file in the `dist` folder to just `.env`. Replace the field `TMDB_API_KEY=[your_tmdb_key]`
+3. Ensure the field `DIR=../../Media` accurately reflects your media collection relative to the `dist` folder.
+4. Run the commands `npm i`, `cd dist` then `node index.js` to start the server.
+5. Enter the initialization endpoint into your web browser
+
+### Client
+
+1. Run `npm i` then `npm start` to start the client. Ensure the server is running.
+2. Access via `http://localhost:3000` or your `ipconfig`/`ifconfig` network IPv4 address
 
 ### `npm i`
 
