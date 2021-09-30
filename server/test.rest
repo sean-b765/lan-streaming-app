@@ -1,0 +1,20 @@
+### GET FILES
+GET http://localhost:5000/files/media
+
+### GET SERIES
+GET http://localhost:5000/files/series
+
+### GET ALL IN SERIES - will return media or seasons along with the type isMedia [true/false]
+GET http://localhost:5000/files/series/[_id]
+
+### GET ALL IN SEASON
+GET http://localhost:5000/files/season/[_id]
+
+###
+### ADMIN INITIALIZATION
+###
+### SCAN FOR FILES, GET THUMBNAILS, ADD MEDIA ITEM TO MONGODB
+GET http://localhost:5000/files/scan
+
+### ADMIN - DROP DB COLLECTIONS
+GET http://localhost:5000/files/drop
