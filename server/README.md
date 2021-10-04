@@ -18,10 +18,20 @@ An API used to stream movies and tv
 - `cd dist`
 - `node index.js` || `nodemon index.js` - start the server
 
+Environment variables
+
+- `DIR=[relative path to your media directory]`
+- `MONGO_URI=[mongodb]`
+- `ADMIN_PASS=[random string of text]`
+  - Used to access admin routes
+- `TMDB_API_KEY=[api key]`
+- `TMDB_API_URL=https://api.themoviedb.org/3`
+- `IMAGE_URL=https://image.tmdb.org/t/p/w1280`
+
 ## Initialization:
 
 - **Must have the correct folder structure/naming convention:**
-  ![Correct folder structure](./screenshots/structure.png)
+  - ![Correct folder structure](./screenshots/structure.png)
 - If there are existing documents, first drop the collections (always safe to just do this first)
 - Hit the /files/scan endpoint and wait a minute or two (depending on how large your media folder is). This will impact the performance of your CPU
 
@@ -109,11 +119,13 @@ Result (season):
 
 **Scan the specified directory for all files**
 
-`GET http://localhost:5000/files/scan`
+`GET http://localhost:5000/files/scan/[ADMIN_PASS]`
+
+- Accessed via `ADMIN_PASS` environment variable
 
 **Drop all MongoDB collections**
 
-`GET http://localhost:5000/files/drop`
+`GET http://localhost:5000/files/drop/[ADMIN_PASS]`
 
 ## Server initialization process
 
