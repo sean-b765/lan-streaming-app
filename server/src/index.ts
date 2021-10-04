@@ -17,8 +17,13 @@ app.use(express.json({ limit: '10mb' }))
 
 app.use('/files', files)
 
-app.listen(5000, () => {
-	console.log(`Server running on port ${5000}`)
+app.get('/', (req, res) => {
+	res.send(`<h1>Service running</h1>`)
+})
+
+const port = process.env.PORT || 5000
+app.listen(port, () => {
+	console.log(`Server running on port ${port}`)
 })
 
 mongoose

@@ -15,8 +15,12 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use('/files', files_1.default);
-app.listen(5000, () => {
-    console.log(`Server running on port ${5000}`);
+app.get('/', (req, res) => {
+    res.send(`<h1>Service running</h1>`);
+});
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
 mongoose_1.default
     .connect(process.env.MONGO_URI)
