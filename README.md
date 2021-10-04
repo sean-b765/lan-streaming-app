@@ -1,11 +1,16 @@
-# Local network streaming app
+# Local network [streaming app](https://friendly-beaver-7bed97.netlify.app/)
+
+This fullstack web application's purpose is to provide a streaming app to users who have a media collection they want to view in a web application. It should only be hosted on a local network as the distribution of media is illegal.
+
+Relies on [TheMovieDatabase](https://www.themoviedb.org/) to gather details via a movie/tv title.
 
 1. [Demos](#demos)
    - [Live Demo](https://friendly-beaver-7bed97.netlify.app/)
 2. [Client](#react-client)
-   - [Dependencies](#dependencies)
+   - [Dependencies](#client-dependencies)
    - [Environment Variables](#client-environment-variables)
 3. [Server](#node-server)
+   - [Dependencies](#server-dependencies)
    - [Setup](#setup)
    - [Server Environment Variables](#server-environment-variables)
    - [Initialization](#initialization)
@@ -16,24 +21,37 @@
 
 ## Demos
 
-Due to obvious reasons, in the live demo I've used royalty free videos from [Pexels](https://www.pexels.com/videos/)
+In the live demo I've used royalty free videos from [Pexels](https://www.pexels.com/videos/)
 
 ### [Live Demo](https://friendly-beaver-7bed97.netlify.app/)
 
-Demo of the player in desktop view:
+#### My Movies
+
+![Movies](./client/demos/movies.png)
+
+#### Series View
+
+![Movies](./client/demos/movie-series.png)
+
+#### TV Series View
+
+![Movies](./client/demos/tv-series.png)
+
+#### Demo of the player in desktop view:
 
 ![Player](./client/demos/player.gif)
-Demo of the navigation in mobile view:
+
+#### Demo of the navigation in mobile view:
 
 ![Navigation](./client/demos/series.gif)
 
-Server initialization process
+#### Server initialization process
 
 ![flowchart of initialization](./server/screenshots/chart.drawio.png)
 
 ## React Client
 
-### Dependencies
+### Client Dependencies
 
 - Build in React
   - Uses a redux store
@@ -48,6 +66,18 @@ Since webpack uses dotenv, it's possible to declare environment variables in a `
 - `REACT_APP_BACKEND_URL=https://whispering-reef-63384.herokuapp.com`
 
 ## Node Server
+
+Streaming a file via an HTML video element separates the file into chunks and intermittently sends this data through a pipeline.
+
+![Demonstration of streaming via chunks](./server/screenshots/streaming%20chunks.drawio.png)
+
+### Server Depencencies
+
+- express
+- mongoose
+- [fluent-ffmpeg](https://www.npmjs.com/package/fluent-ffmpeg) - used to get (duration) details about a media file. It is required to use this over the TMDB API as durations may not match, and may cause cuts as the exact duration is required by the streaming functionality
+- [parse-torrent-title](https://www.npmjs.com/package/parse-torrent-title) - a handy library which uses regex to parse filenames. RegEx can be added via `parser.addHandler(regex, outputName)`. Parse filenames via `parser.parse(filename)`, which returns an object.
+- [axios](https://www.npmjs.com/package/axios) - used to get details of a movie from TMDB
 
 ### Setup:
 
