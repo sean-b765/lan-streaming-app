@@ -1,2 +1,4 @@
 Media/
 node_modules/
+
+.env

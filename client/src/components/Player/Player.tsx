@@ -16,6 +16,7 @@ import { useIdleTimer } from 'react-idle-timer'
 import Loader from '../Loader'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MediaActions } from '../../types/enums'
+import { api_url } from '../../util/constants'
 
 const Player: React.FC<{
 	active: boolean
@@ -133,7 +134,7 @@ const Player: React.FC<{
 
 	const formatMediaStream = () => {
 		if (!media._id) return
-		return `http://192.168.1.7:5000/files/stream/${media?._id}`
+		return `${api_url}/files/stream/${media?._id}`
 	}
 
 	const formatTime = (value: number): string => {
